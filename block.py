@@ -20,11 +20,15 @@ class Block:
         self.set_data(data)
         if previous_block:
             assert isinstance(previous_block, Block)
-            self.set_hashstr(previous_block)
-            self.set_hashval()
+            self.set_hashval(previous_block)
+            self.set_index(previous_block.index + 1)
+            self.previous_block = previous_block
+            self.genesis_block = False
         elif genesis_block:
-            self.set_hashstr()
-            self.set_hashval()
+            self.set_hashval(None)
+            self.set_index(0)
+            self.previous_block = None
+            self.genesis_block = True
         else:
             print("Error: did not generate a new block.")
             
@@ -39,11 +43,17 @@ class Block:
     def get_hashval(self):
         return self.hash_val
 
+    def get_index(self):
+        return self.index
+
     def get_hashstr(self):
         return self.hash_str
-    
+
     def set_timestamp(self):
         self.timestamp = time.time()
+
+    def set_index(self, index):
+        self.index = index
 
     def set_data(self, data):
         if data:
@@ -51,52 +61,29 @@ class Block:
         else:
             self.data = "new data block"
 
-    def set_hashstr(self, prevblock=None):
-        try:
-            if prevblock:
-                assert isinstance(prevblock, Block)
-                extra = prevblock.get_hashval()
-            else: 
-                extra = random.randint(0, 2**31)
-
-            hash_data = str(self.get_data())
-            hash_time = str(self.get_timestamp())
-            hash_xtra = str(extra)
-
-            self.hash_str = str(hash_data + hash_time + hash_xtra)
-        except:
-            print("Error: could not generate hash value for new block")
             
-    def set_hashval(self):
-        bhash_str = str(self.get_hashstr).encode('utf-8')
-        self.hash_val = hashlib.sha256(bhash_str).hexdigest()
+    def set_hashval(self, prevblock):
 
-        
+        if prevblock:
+            assert isinstance(prevblock, Block)
+            extra = prevblock.get_hashval()
+        else: 
+            extra = random.randint(0, 2**31)
 
+        hash_data = str(self.get_data())
+        hash_time = str(self.get_timestamp())
+        hash_xtra = str(extra)
+
+        self.hash_val = hash_function(hash_data, hash_time, hash_xtra)
+
+def hash_function(data, time, xtra):
+    bhash_str = (str(data) + str(time) + str(xtra)).encode('utf-8')
+    return hashlib.sha256(bhash_str).hexdigest()
 
 if __name__ == "__main__":
 
     firstblock = Block(genesis_block=True)
-    secondblock = Block(previous_block=firstblock, genesis_block=False)
-    thirdblock = Block(previous_block=secondblock, genesis_block=False)
-    fourthblock = Block(previous_block=thirdblock, genesis_block=False)
+    secondblock = Block(previous_block=firstblock)
+    thirdblock = Block(previous_block=secondblock)
+    fourthblock = Block(previous_block=thirdblock)
 
-    # print(firstblock.hash_val)
-    # print(secondblock.hash_val)
-    # print(thirdblock.hash_val)
-    # print(fourthblock.hash_val)
-
-    # print(firstblock.data)
-    # print(secondblock.data)
-    # print(thirdblock.data)
-    # print(fourthblock.data)
-
-    # print(firstblock.timestamp)
-    # print(secondblock.timestamp)
-    # print(thirdblock.timestamp)
-    # print(fourthblock.timestamp)
-
-    # print(firstblock.hash_str)
-    # print(secondblock.hash_str)
-    # print(thirdblock.hash_str)
-    # print(fourthblock.hash_str)
