@@ -70,7 +70,7 @@ class Chain:
             if self.blocks[i-1].hash_val != prev_hashval:
                 print(f'Conflicting hashes at block {i}.')
                 return False
-            if current_block.hash_val != block.hash_function(current_data, current_timestamp, prev_hashval):
+            if current_block.hash_val != block.hash_function(current_data, current_timestamp, prev_hashval, 0):
                 print(f'Could not recreate hash at block {i}.')
                 return False
             if prev_block.timestamp >= current_block.timestamp:
@@ -82,18 +82,18 @@ class Chain:
     
     def visualize_chain(self):
         for block in self.blocks:
-            print(" - - - - - - - - - -")
+            print(" - - - - - - - - - - -")
             print("|  index: ", block.index)
-            print("|                   |")
+            print("|                     |")
             for i in range(0, len(str(block.data)), 10):
                 print("|  data: ", str(block.data)[i:i+10])
-            print("|                   |")
+            print("|                     |")
             for i in range(0, len(str(block.hash_val)), 10):
                 print("|  hash: ", str(block.hash_val)[i:i+10])
-            print("|                   |")
-            print(" - - - - - - - - - -")
-            print("          || ")
-            print("          || ")
+            print("|                     |")
+            print(" - - - - - - - - - - -")
+            print("          | | ")
+            print("          | | ")
 
 
 
@@ -105,14 +105,15 @@ if __name__ == "__main__":
         data = "block number "+str(i)
         new_chain.add_block(data)
 
-    for i in range(5):
-        block_i = new_chain.get_block_i(i)
-        print(block_i.data)
+    # for i in range(5):
+    #     block_i = new_chain.get_block_i(i)
+    #     print(block_i.data)
     
     fork = new_chain.fork_chain()
 
+    fork.visualize_chain()
     fork.verify_chain()
-    
-    new_chain.verify_chain()
 
     new_chain.visualize_chain()
+    new_chain.verify_chain()
+

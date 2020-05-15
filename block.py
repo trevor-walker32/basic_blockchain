@@ -73,11 +73,12 @@ class Block:
         hash_data = str(self.get_data())
         hash_time = str(self.get_timestamp())
         hash_xtra = str(extra)
+        nonce = 0
 
-        self.hash_val = hash_function(hash_data, hash_time, hash_xtra)
+        self.hash_val = hash_function(hash_data, hash_time, hash_xtra, nonce)
 
-def hash_function(data, time, xtra):
-    bhash_str = (str(data) + str(time) + str(xtra)).encode('utf-8')
+def hash_function(data, time, xtra, nonce):
+    bhash_str = (str(data) + str(time) + str(xtra) + str(nonce)).encode('utf-8')
     return hashlib.sha256(bhash_str).hexdigest()
 
 if __name__ == "__main__":
@@ -85,7 +86,15 @@ if __name__ == "__main__":
     data = "new block"
 
     firstblock = Block(data, genesis_block=True)
-    secondblock = Block(data, previous_block=firstblock)
-    thirdblock = Block(data, previous_block=secondblock)
-    fourthblock = Block(data, previous_block=thirdblock)
+    
+    nonce = 0
+    time_ = time.time()
+    hashed_value = hash_function("data", time_, firstblock.hash_val, nonce)
+    while(hashed_value[:5] != "00000"):
+        nonce += 1
+        hashed_value = hash_function("data", time_, firstblock.hash_val, nonce)
+
+    print(hashed_value)
+    
+    print("found hash challenge")
 
