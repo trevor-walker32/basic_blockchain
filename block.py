@@ -82,8 +82,10 @@ def hash_function(data, time, xtra):
 
 if __name__ == "__main__":
 
-    firstblock = Block(genesis_block=True)
-    secondblock = Block(previous_block=firstblock)
-    thirdblock = Block(previous_block=secondblock)
-    fourthblock = Block(previous_block=thirdblock)
+    data = "new block"
+
+    firstblock = Block(data, genesis_block=True)
+    secondblock = Block(data, previous_block=firstblock)
+    thirdblock = Block(data, previous_block=secondblock)
+    fourthblock = Block(data, previous_block=thirdblock)
 

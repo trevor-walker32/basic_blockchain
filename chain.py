@@ -53,8 +53,8 @@ class Chain:
 
     
     def verify(self): 
-        for i in range(1,len(self.blocks)):
 
+        for i in range(1,len(self.blocks)):
             current_block = self.get_block_i(i)
             prev_block = self.get_block_i(i-1)
             current_data = current_block.data
@@ -71,8 +71,6 @@ class Chain:
                 print(f'Conflicting hashes at block {i}.')
                 return False
             if current_block.hash_val != block.hash_function(current_data, current_timestamp, prev_hashval):
-                print(self.blocks[i].get_hashstr())
-                print(self.blocks[i].hash_function())
                 print(f'Could not recreate hash at block {i}.')
                 return False
             if prev_block.timestamp >= current_block.timestamp:
