@@ -87,14 +87,3 @@ if __name__ == "__main__":
 
     firstblock = Block(data, genesis_block=True)
     
-    nonce = 0
-    time_ = time.time()
-    hashed_value = hash_function("data", time_, firstblock.hash_val, nonce)
-    while(hashed_value[:5] != "00000"):
-        nonce += 1
-        hashed_value = hash_function("data", time_, firstblock.hash_val, nonce)
-
-    print(hashed_value)
-    
-    print("found hash challenge")
-

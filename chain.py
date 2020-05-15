@@ -105,10 +105,6 @@ if __name__ == "__main__":
         data = "block number "+str(i)
         new_chain.add_block(data)
 
-    # for i in range(5):
-    #     block_i = new_chain.get_block_i(i)
-    #     print(block_i.data)
-    
     fork = new_chain.fork_chain()
 
     fork.visualize_chain()
