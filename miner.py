@@ -11,7 +11,6 @@ class Miner:
         self.miner_id = miner_id
         self.found_hash = None
 
-
     def simulate_proof_of_work(self, level_of_difficulty:int, nonce_method:bool = False, timestamp_method:bool = False):
         
         dummy_block = block.Block("data", previous_block=None, genesis_block=True)
