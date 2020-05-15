@@ -52,7 +52,7 @@ class Chain:
         return copy.deepcopy(self)
 
     
-    def verify(self): 
+    def verify_chain(self): 
 
         for i in range(1,len(self.blocks)):
             current_block = self.get_block_i(i)
@@ -79,6 +79,22 @@ class Chain:
         print("this chain appears to be correct")
         return True
 
+    
+    def visualize_chain(self):
+        for block in self.blocks:
+            print(" - - - - - - - - - -")
+            print("|  index: ", block.index)
+            print("|                   |")
+            for i in range(0, len(str(block.data)), 10):
+                print("|  data: ", str(block.data)[i:i+10])
+            print("|                   |")
+            for i in range(0, len(str(block.hash_val)), 10):
+                print("|  hash: ", str(block.hash_val)[i:i+10])
+            print("|                   |")
+            print(" - - - - - - - - - -")
+            print("          || ")
+            print("          || ")
+
 
 
 if __name__ == "__main__":
@@ -88,9 +104,15 @@ if __name__ == "__main__":
     for i in range(5):
         data = "block number "+str(i)
         new_chain.add_block(data)
+
+    for i in range(5):
+        block_i = new_chain.get_block_i(i)
+        print(block_i.data)
     
     fork = new_chain.fork_chain()
 
-    fork.verify()
+    fork.verify_chain()
     
-    new_chain.verify()
+    new_chain.verify_chain()
+
+    new_chain.visualize_chain()
